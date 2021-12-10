@@ -1,13 +1,9 @@
 import React from "react";
 import "./SearchPage.css";
 import Search from "../components/Search";
-import { useStateValue } from "../StateProvider";
-import useGoogleSearch from "../useGoogleSearch";
 import * as dummy from "./DummyData";
 
-import SearchIcon from "@material-ui/icons/Search";
 
-import { Button } from "@material-ui/core"
 import HeaderButtonGroup from "../components/HeaderButtonGroup"
 
 const HelpPage = () => {
@@ -50,7 +46,7 @@ const HelpPage = () => {
 }
 
 
-const SearchResult = ({ data }) =>
+const SearchResult = () =>
 {
   return (
     <div className="browse_contents_data" >
@@ -64,7 +60,7 @@ const SearchResult = ({ data }) =>
   )
 }
 
-const ContentPanel = ({ data }) =>
+const ContentPanel = () =>
 {
   return (
     <div className="browse_contents_list" >

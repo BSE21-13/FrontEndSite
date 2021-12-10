@@ -3,7 +3,6 @@ import React from 'react'
 import { useHistory } from 'react-router'
 import "./Search.css";
 
-
 const HeaderButtonGroup = () =>
 {
   const history = useHistory()

@@ -2,26 +2,16 @@ import React from "react";
 import "./SearchPage.css";
 import Search from "../components/Search";
 import { useStateValue } from "../StateProvider";
-import useGoogleSearch from "../useGoogleSearch";
-import { Link , useHistory} from "react-router-dom";
+// import useGoogleSearch from "../useGoogleSearch";
 import * as dummy from "./DummyData";
 
-import SearchIcon from "@material-ui/icons/Search";
-import {
-  Description,
-  Image,
-  LocalOffer,
-  MoreVert,
-  Room,
-} from "@material-ui/icons";
-import { Button } from "@material-ui/core"
 import HeaderButtonGroup from "../components/HeaderButtonGroup"
 
 const ReadSearchResult = () => {
-  const [{ term }, dispatch] = useStateValue();
+  const [{ term }] = useStateValue();
 
   // LIVE API CALL
-  const { data } = useGoogleSearch(term);
+//   const { data } = useGoogleSearch(term);
 
   return (
     <div className="searchPage">
