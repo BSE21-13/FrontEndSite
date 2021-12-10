@@ -1,18 +1,8 @@
 import React, { useState } from "react";
 import "./SearchPage.css";
 import Search from "../components/Search";
-import { useStateValue } from "../StateProvider";
-import useGoogleSearch from "../useGoogleSearch";
-import { Link , useHistory} from "react-router-dom";
 
-import SearchIcon from "@material-ui/icons/Search";
-import {
-  Description,
-  Image,
-  LocalOffer,
-  MoreVert,
-  Room,
-} from "@material-ui/icons";
+// import SearchIcon from "@material-ui/icons/Search";
 import { Box, Button, Modal, Typography, TextField } from "@material-ui/core"
 import HeaderButtonGroup from "../components/HeaderButtonGroup"
 
@@ -62,7 +52,7 @@ const term = true
 }
 
 
-const ContactResult = ({ data, key }) =>
+const ContactResult = () =>
 {
     const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
