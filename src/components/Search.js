@@ -8,7 +8,7 @@ import { useStateValue } from "../StateProvider";
 import { actionTypes } from "../reducer";
 
 const  Search = ({ hideButtons = false }) => {
-  const [{}, dispatch] = useStateValue();
+  const [, dispatch] = useStateValue();
   const [input, setInput] = useState("");
   const history = useHistory();
 
@@ -53,7 +53,7 @@ const  Search = ({ hideButtons = false }) => {
             Google Search
           </Button>
           <Button variant="outlined" className="search__buttonsHidden">
-            I'm Feeling Lucky
+            {`I'm Feeling Lucky`}
           </Button>
         </div>
       )}
