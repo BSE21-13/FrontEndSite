@@ -7,7 +7,7 @@ const useCadiseSearch = (term) => {
   useEffect(() => {
     const fetchData = async () => {
       // fetch(`https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CONTEXT_KEY}&q=${term}`)
-      fetch(`http://localhost:5000/search`)
+      fetch(`http://localhost:5000/search?q=${term}`)
         .then((response) => response.json())
         .then((result) => setData(result));
     };

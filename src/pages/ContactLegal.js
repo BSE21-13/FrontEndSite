@@ -53,7 +53,11 @@ const ContactResult = () => {
         </div>
 
         <div className='home__headerLeft'>
-          <Button variant='outlined' onClick={handleOpen}>
+          <Button
+            style={{ backgroundColor: '#f7f7f7' }}
+            variant='outlined'
+            onClick={handleOpen}
+          >
             send email
           </Button>
         </div>

@@ -24,7 +24,7 @@ const SearchPage = () => {
                 <Chip
                   size='primary'
                   label={item}
-                  variant='outlined'
+                  // variant='outlined'
                   size='small'
                 />
               </span>
