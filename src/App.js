@@ -14,14 +14,11 @@ function App() {
     <div className='App'>
       <Router>
         <Switch>
-          {/* search page (the result page) */}
-          <Route exact path='/' component={Home} />
-
           {/* results page (the result page) */}
           <Route exact path='/search' component={SearchPage} />
 
           {/* read results page (the result page) */}
-          <Route path='/result' component={ReadSearchResult} />
+          <Route path='/result/:id' component={ReadSearchResult} />
 
           {/* browse page (the result page) */}
           <Route exact path='/browse' component={BrowseDocument} />
@@ -31,6 +28,9 @@ function App() {
 
           {/* contact page (the result page) */}
           <Route exact path='/contact-legal' component={ContactLegal} />
+
+          {/* search page (the result page) */}
+          <Route exact path='/' component={Home} />
         </Switch>
       </Router>
     </div>

@@ -3,7 +3,6 @@
   max-width: 80vw;
   margin-left: 240px;
   margin-bottom: 20px;
-
 }
 
 .searchPage__headerTop,
@@ -94,31 +93,28 @@
 }
 
 .searchPage__result {
-  margin: 30px 0;
+  margin: 20px 0;
+  cursor: pointer;
   text-decoration: none;
-  border: solid 1px;
-  border-radius: 10px;
+  /* border: solid 1px;
+  border-radius: 10px; */
   padding: 10px;
   height: 120px;
 }
 
-
 .searchPage__result_1 {
   margin: 30px 0;
   text-decoration: none;
-  border: solid 1px;
-  border-radius: 10px;
-  padding: 10px;
+
+  padding: 30px;
   max-height: 90vh;
   overflow-y: auto;
-  
 }
 
 .contact__result {
   margin: 30px 0;
   text-decoration: none;
-  border: solid 1px;
-  border-radius: 10px;
+
   padding: 10px 30px;
   height: 180px;
   display: flex;
@@ -146,23 +142,21 @@
 }
 
 .browse_contents_list {
-  margin: 30px 20px 30px 0;
+  /* margin: 30px 20px 30px 0; */
+  margin-right: 20px;
   text-decoration: none;
-  border: solid 1px;
-  border-radius: 10px;
   padding: 10px;
   max-height: 80vh;
-  width: 700vh;
+  width: 20vh;
   overflow-y: auto;
 }
 
 .browse_contents_data {
-  margin: 30px 0;
+  /* margin: 30px 0; */
   text-decoration: none;
-  border: solid 1px;
-  border-radius: 10px;
-  padding: 10px;
-  max-height: 80vh;
+
+  padding: 30px;
+  max-height: 90vh;
   overflow-y: auto;
 }
 
@@ -181,7 +175,6 @@
   margin-right: 40px;
 }
 
-
 .searchPage__resultTitle {
   text-decoration: none;
 }
@@ -196,4 +189,14 @@
 
 .Snippet {
   margin-top: 10px;
+}
+
+.chip-stack {
+  display: flex;
+  margin-top: 8px;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.chip-item {
+  margin-right: 4px;
 }
