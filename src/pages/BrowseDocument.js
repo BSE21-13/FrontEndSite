@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './SearchPage.css';
 import './BrowseDoc.css';
-import * as dummy from './DummyData';
 
 import { useHistory } from 'react-router-dom';
 import SearchInPage from '../components/SearchInPage';
@@ -55,7 +54,7 @@ const SearchResult = ({ section }) => {
         {section === 2 && Preliminaries()}
         {section === 3 && Preamble()}
         {section === 4 && Chapter_1()}
-        {section == 5 && Chapter_2()}
+        {section === 5 && Chapter_2()}
         {section === 6 && Chapter_3()}
         {section === 7 && Chapter_4()}
         {section === 8 && Chapter_5()}
@@ -86,161 +85,161 @@ const ContentPanel = ({ setSection }) => {
         <h2>Contents</h2>
 
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(1)}
         >
           <p>Introduction</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(2)}
         >
           <p>Preliminaries</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(3)}
         >
           <p>The Preamble</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(4)}
         >
           <p>Chapter One</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(5)}
         >
           <p>Chapter Two</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(6)}
         >
           <p>Chapter Three</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(7)}
         >
           <p>Chapter Four</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(8)}
         >
           <p>Chapter Five</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(9)}
         >
           <p>Chapter Six</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(10)}
         >
           <p>Chapter Seven</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(11)}
         >
           <p>Chapter Eight</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(12)}
         >
           <p>Chapter Nine</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(13)}
         >
           <p>Chapter Ten</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(14)}
         >
           <p>Chapter Eleven</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(15)}
         >
           <p>Chapter Twelve</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(16)}
         >
           <p>Chapter Thirteen</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(17)}
         >
           <p>Chapter Fourteen</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(18)}
         >
           <p>Chapter Fifteen</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(19)}
         >
           <p>Chapter Sixteen</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(20)}
         >
           <p>Chapter Seventeen</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(21)}
         >
           <p>Chapter Eighteen</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(22)}
         >
           <p>Chapter Nineteen</p>
         </a>
         <a
-          href='#'
+          href='/'
           className='searchPage__resultTitle'
           onClick={() => setSection(23)}
         >
