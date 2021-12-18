@@ -2,7 +2,7 @@ import React from 'react';
 import './SearchPage.css';
 import { useStateValue } from '../StateProvider';
 import useCadiseSearch from '../useCadiseSearch';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Chip, Paper } from '@material-ui/core';
 import SearchInPage from '../components/SearchInPage';
 
@@ -22,7 +22,6 @@ const SearchPage = () => {
               <span key={index} className='chip-item'>
                 {' '}
                 <Chip
-                  size='primary'
                   label={item}
                   // variant='outlined'
                   size='small'
