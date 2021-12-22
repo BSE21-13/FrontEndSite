@@ -1,5 +1,7 @@
 FROM node:12-slim AS builder
+
 ENV NODE_ENV=production
+ENV REACT_APP_BACKEND_URL='https://cadise-api-46vvqxzipa-uc.a.run.app'
 
 WORKDIR /app
 
