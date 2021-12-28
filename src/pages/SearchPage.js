@@ -53,7 +53,6 @@ const SearchPage = () => {
               <span key={index} className='chip-item'>
                 {' '}
                 <Chip
-                  size='primary'
                   label={item}
                   // variant='outlined'
                   size='small'

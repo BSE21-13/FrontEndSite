@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './SearchPage.css';
 import './BrowseDoc.css';
-import * as dummy from './DummyData';
 
 import { useHistory } from 'react-router-dom';
 import SearchInPage from '../components/SearchInPage';
@@ -48,11 +47,7 @@ const BrowseDocument = () => {
     <div className='searchPage'>
       <SearchInPage history={history} />
       <div className='browsePage__results'>
-        <ContentMenu
-          data={'item'}
-          setSection={setSection}
-          section={currentSection}
-        />
+        <ContentMenu setSection={setSection} section={currentSection} />
         <SearchResult data={'item'} section={currentSection} />
       </div>
     </div>
@@ -67,7 +62,7 @@ const SearchResult = ({ section }) => {
         {section === 2 && Preliminaries()}
         {section === 3 && Preamble()}
         {section === 4 && Chapter_1()}
-        {section == 5 && Chapter_2()}
+        {section === 5 && Chapter_2()}
         {section === 6 && Chapter_3()}
         {section === 7 && Chapter_4()}
         {section === 8 && Chapter_5()}
