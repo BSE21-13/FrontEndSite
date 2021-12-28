@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import './SearchPage.css';
 
-// import SearchIcon from "@material-ui/icons/Search";
-import { Box, Button, Modal, Typography, TextField } from '@material-ui/core';
+// import SearchIcon from "'@mui/icons-material/Search";
+import { Box, Button, Modal, Typography, TextField } from '@mui/material';
 import SearchInPage from '../components/SearchInPage';
 import { useHistory } from 'react-router-dom';
-import { Paper } from '@material-ui/core';
+import { Paper } from '@mui/material';
 
 const ContactLegal = () => {
   const history = useHistory();

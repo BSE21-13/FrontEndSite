@@ -99,7 +99,7 @@
   /* border: solid 1px;
   border-radius: 10px; */
   padding: 10px;
-  height: 120px;
+  height: 150px;
 }
 
 .searchPage__result_1 {
@@ -189,6 +189,12 @@
 
 .Snippet {
   margin-top: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
 }
 
 .chip-stack {

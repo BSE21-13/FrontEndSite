@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './Search.css';
 
-import SearchIcon from '@material-ui/icons/Search';
-import { Button } from '@material-ui/core';
+import SearchIcon from '@mui/icons-material/Search';
+import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { useStateValue } from '../StateProvider';
 import { actionTypes } from '../reducer';
@@ -31,6 +31,7 @@ const Search = ({ hideButtons = false }) => {
           type='text'
           value={input}
           style={{ marginRight: '5px' }}
+          spellCheck='true'
           onChange={(e) => setInput(e.target.value)}
         />
         {/* <MicIcon /> */}

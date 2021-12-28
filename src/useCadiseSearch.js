@@ -1,19 +1,22 @@
 import { useEffect, useState } from 'react';
-// import API_KEY from './keys';
+import * as fetchFunctions from './api/index';
+import endpoints from './api/endpoints';
 
 const useCadiseSearch = (term) => {
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
-      // fetch(`https://www.googleapis.com/customsearch/v1?q=${term}`)
-      fetch(`http://localhost:5000/search?q=${term}`)
-        .then((response) => response.json())
-        .then((result) => setData(result));
+      const result = await fetchFunctions.getData(
+        `${endpoints.search}?q=${term}`,
+      );
+      setData(result.data);
     };
     fetchData();
   }, [term]);
-  return { data };
+  return { data, loading };
 };
 
 export default useCadiseSearch;
