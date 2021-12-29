@@ -155,7 +155,7 @@
   /* margin: 30px 0; */
   text-decoration: none;
 
-  padding: 30px;
+  padding: 100px;
   max-height: 90vh;
   overflow-y: auto;
 }
@@ -205,4 +205,30 @@
 }
 .chip-item {
   margin-right: 4px;
+}
+
+.calendlyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  margin: 0;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  letter-spacing: 0.02857em;
+  text-transform: uppercase;
+  width: 100%;
+  padding: 5px 15px;
+  border-radius: 4px;
+  border: 1px solid rgba(25, 118, 210, 0.5);
+  color: #1976d2;
 }

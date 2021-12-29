@@ -64,11 +64,7 @@ const SearchPage = () => {
           {currentPosts?.map((item, index) => (
             <SearchResult key={index} data={item} history={history} />
           ))}
-          {/* <Pagination
-        postsPerPage={postsPerPage}
-        totalPosts={ data?.data?.results?.length}
-        paginate={paginate}
-      /> */}
+
           {data?.data?.results?.length > 5 && (
             <Pagination
               count={pageNumbers?.length}
@@ -88,7 +84,7 @@ const SearchResult = ({ data, key, history }) => {
       <div
         className='searchPage__result'
         onClick={() =>
-          history.push(`/result/${data?.chapter}#:~:text=${data?.text}`)
+          history.push(`/result/${data?.chapter}/#:~:text=${data?.text}`)
         }
       >
         <h2>{data.chapter}</h2>
@@ -96,28 +92,6 @@ const SearchResult = ({ data, key, history }) => {
         <p className='Snippet'>{data.text}</p>
       </div>
     </Paper>
-  );
-};
-
-const Pagination1 = ({ postsPerPage, totalPosts, paginate }) => {
-  const pageNumbers = [];
-
-  for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-  return (
-    <nav>
-      <ul className='pagination'>
-        {pageNumbers.map((number) => (
-          <li key={number} className='page-item'>
-            <span onClick={() => paginate(number)} className='page-link'>
-              {number}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </nav>
   );
 };
 

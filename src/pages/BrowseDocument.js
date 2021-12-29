@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './SearchPage.css';
 import './BrowseDoc.css';
-
 import { useHistory } from 'react-router-dom';
 import SearchInPage from '../components/SearchInPage';
 import {

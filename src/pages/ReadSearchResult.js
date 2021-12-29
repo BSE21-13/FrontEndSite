@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './SearchPage.css';
 import { useStateValue } from '../StateProvider';
-import * as dummy from './DummyData';
-
 import { useParams } from 'react-router-dom';
 import SearchInPage from '../components/SearchInPage';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
@@ -57,7 +55,7 @@ const ReadSearchResult = () => {
 const SearchResult = ({ section }) => {
   return (
     <Paper elevation={3}>
-      <div className='browse_contents_data'>
+      <div className='browse_contents_data' style={{ padding: '20px 200px' }}>
         {section?.includes(
           'National objectives and directive principles of state policy',
         ) && Preamble()}
