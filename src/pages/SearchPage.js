@@ -3,7 +3,7 @@ import './SearchPage.css';
 import { useStateValue } from '../StateProvider';
 import useCadiseSearch from '../useCadiseSearch';
 import { useHistory } from 'react-router-dom';
-import { Chip, Paper, TablePagination } from '@mui/material';
+import { Chip, Paper } from '@mui/material';
 import { Pagination } from '@mui/material';
 import SearchInPage from '../components/SearchInPage';
 
@@ -23,8 +23,6 @@ const SearchPage = () => {
   );
 
   // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   const handleChange = (event, value) => {
     setCurrentPage(value);
   };
@@ -83,11 +81,9 @@ const SearchResult = ({ data, key, history }) => {
     <Paper elevation={3}>
       <div
         className='searchPage__result'
-        onClick={() =>
-          history.push(`/result/${data?.chapter}/#:~:text=${data?.text}`)
-        }
+        onClick={() => history.push(`/result/${data?.chapter}`)}
       >
-        <h2>{data.chapter}</h2>
+        <h4>{data.chapter}</h4>
 
         <p className='Snippet'>{data.text}</p>
       </div>

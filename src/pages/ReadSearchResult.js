@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './SearchPage.css';
-import { useStateValue } from '../StateProvider';
 import { useParams } from 'react-router-dom';
 import SearchInPage from '../components/SearchInPage';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { Paper } from '@mui/material';
 import {
-  Introduction,
   Preliminaries,
   Preamble,
   Chapter_1,
@@ -33,12 +31,14 @@ import {
 
 const ReadSearchResult = () => {
   const { id } = useParams();
+  // const { text } = useParams();
   const history = useHistory();
   const [currentSection, setSection] = useState('');
 
   useEffect(() => {
     setSection(id);
-  }, []);
+  }, [id]);
+
   return (
     <div className='searchPage'>
       <SearchInPage history={history} />
@@ -46,13 +46,16 @@ const ReadSearchResult = () => {
       <div className='searchPage__results'>
         <h2 className=''>{id}</h2>
 
-        <SearchResult data={'item'} section={currentSection} />
+        <SearchResult data={id} section={currentSection} history={history} />
       </div>
     </div>
   );
 };
 
-const SearchResult = ({ section }) => {
+const SearchResult = ({ section, data, history }) => {
+  // useEffect(() => {
+  //    history.push(`/result/${data}#:~:text=(i)%20the,society`)
+  // }, [section]);
   return (
     <Paper elevation={3}>
       <div className='browse_contents_data' style={{ padding: '20px 200px' }}>

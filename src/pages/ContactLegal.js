@@ -4,7 +4,6 @@ import './SearchPage.css';
 // import SearchIcon from "'@mui/icons-material/Search";
 import { Box, Button, Modal, Typography, TextField } from '@mui/material';
 import SearchInPage from '../components/SearchInPage';
-import CalendlyEmbed from '../components/CalendlyEmbed';
 import { PopupButton } from 'react-calendly';
 import { useHistory } from 'react-router-dom';
 import { Paper, Pagination } from '@mui/material';
@@ -16,13 +15,12 @@ const ContactLegal = () => {
   const history = useHistory();
   const [selectedLawyer, setSelectedLawyer] = useState(null);
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     const fetchData = async () => {
       const result = await fetchFunctions.getData(endpoints.get_legal_list);
       setData(result.data);
-      console.log(result.data);
     };
     fetchData();
   }, []);
@@ -36,8 +34,6 @@ const ContactLegal = () => {
   const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem);
 
   // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   const handleChange = (event, value) => {
     setCurrentPage(value);
   };
