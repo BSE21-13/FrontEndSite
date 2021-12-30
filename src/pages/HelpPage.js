@@ -4,7 +4,7 @@ import * as dummy from './DummyData';
 
 import { useHistory } from 'react-router-dom';
 import SearchInPage from '../components/SearchInPage';
-import { Paper } from '@material-ui/core';
+import { Paper } from '@mui/material';
 
 const HelpPage = () => {
   const history = useHistory();

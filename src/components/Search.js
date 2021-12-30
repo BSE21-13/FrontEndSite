@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './Search.css';
 
-import SearchIcon from '@material-ui/icons/Search';
-import { Button } from '@material-ui/core';
+import SearchIcon from '@mui/icons-material/Search';
+import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { useStateValue } from '../StateProvider';
 import { actionTypes } from '../reducer';
@@ -15,12 +15,16 @@ const Search = ({ hideButtons = false }) => {
   const search = (e) => {
     e.preventDefault();
 
-    dispatch({
-      type: actionTypes.SET_SEARCH_TERM,
-      term: input,
-    });
+    const trimmedInput = input.trim();
 
-    history.push('/search');
+    if (trimmedInput.length > 2) {
+      dispatch({
+        type: actionTypes.SET_SEARCH_TERM,
+        term: input,
+      });
+
+      history.push('/search');
+    }
   };
 
   return (
@@ -31,6 +35,7 @@ const Search = ({ hideButtons = false }) => {
           type='text'
           value={input}
           style={{ marginRight: '5px' }}
+          spellCheck='true'
           onChange={(e) => setInput(e.target.value)}
         />
         {/* <MicIcon /> */}
