@@ -2,4 +2,4 @@
 
 CONSTITUIONAL AWARENESS THROUGH A DEDICATED INTELLIGENT SEARCH ENGINE (CADISE)
 
-Staging: https://frontend-staging-46vvqxzipa-uc.a.run.app
+Staging: https://cadise-staging-46vvqxzipa-uc.a.run.app
