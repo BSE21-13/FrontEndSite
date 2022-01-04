@@ -1,30 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import './SearchPage.css';
-
+import Recaptcha from 'react-recaptcha';
 // import SearchIcon from "'@mui/icons-material/Search";
 import { Box, Button, Modal, Typography, TextField } from '@mui/material';
 import SearchInPage from '../components/SearchInPage';
-import CalendlyEmbed from '../components/CalendlyEmbed';
 import { PopupButton } from 'react-calendly';
 import { useHistory } from 'react-router-dom';
 import { Paper, Pagination } from '@mui/material';
 import { Send, CancelOutlined } from '@mui/icons-material';
-import * as fetchFunctions from '../api/index';
-import endpoints from '../api/endpoints';
+import * as contactActions from '../redux/actions/contactLegal';
 
 const ContactLegal = () => {
+  const dispatch = useDispatch();
+  const { data, loading } = useSelector((state) => state.contactLegal);
+
   const history = useHistory();
   const [selectedLawyer, setSelectedLawyer] = useState(null);
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    setLoading(true);
-    const fetchData = async () => {
-      const result = await fetchFunctions.getData(endpoints.get_legal_list);
-      setData(result.data);
-      console.log(result.data);
-    };
-    fetchData();
+    dispatch(contactActions.getLegal());
   }, []);
 
   // Pagination control
@@ -36,8 +31,6 @@ const ContactLegal = () => {
   const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem);
 
   // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   const handleChange = (event, value) => {
     setCurrentPage(value);
   };
@@ -65,6 +58,8 @@ const ContactLegal = () => {
                 data={item}
                 setLawyer={setSelectedLawyer}
                 lawyer={selectedLawyer}
+                dispatch={dispatch}
+                loading={loading}
               />
             ))
           : 'No lawyers list.'}
@@ -81,7 +76,7 @@ const ContactLegal = () => {
   );
 };
 
-const ContactResult = ({ data, setLawyer, lawyer }) => {
+const ContactResult = ({ data, setLawyer, lawyer, dispatch, loading }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -151,12 +146,18 @@ const ContactResult = ({ data, setLawyer, lawyer }) => {
           </Button>
         </div>
       </Paper>
-      <ContactModal open={open} handleClose={handleClose} lawyer={lawyer} />
+      <ContactModal
+        open={open}
+        handleClose={handleClose}
+        lawyer={lawyer}
+        dispatch={dispatch}
+        loading={loading}
+      />
     </>
   );
 };
 
-const ContactModal = ({ open, handleClose, lawyer }) => {
+const ContactModal = ({ open, handleClose, lawyer, dispatch, loading }) => {
   const style = {
     position: 'absolute',
     top: '50%',
@@ -169,43 +170,70 @@ const ContactModal = ({ open, handleClose, lawyer }) => {
     p: 4,
   };
 
-  const [toEmail, setToEmail] = useState('');
   const [fromEmail, setFromEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [messageError, setMessageError] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+
+  const recaptchaApiKey = `${process.env.REACT_APP_RECAPTCHA_API_KEY}`;
 
   const sendData = async (payload) => {
-    const result = await fetchFunctions.postData(
-      endpoints.contact_legal,
-      payload,
-    );
-    return result;
+    if (isVerified) {
+      dispatch(contactActions.sendEmail(payload));
+      setIsVerified(false);
+    } else {
+      window.alert('Please verify that your are a human.');
+    }
   };
 
   const clearForm = () => {
-    setToEmail('');
     setFromEmail('');
     setMessage('');
+    setEmailError(false);
+    setMessageError(false);
   };
 
   const sendEmail = () => {
-    setLoading(true);
-    const payload = {
-      to_email: toEmail,
-      from_email: fromEmail,
-      message,
-    };
+    let trimMessage = message.trim();
+    if (!emailError && trimMessage.length > 0) {
+      const payload = {
+        to_email: lawyer?.email,
+        from_email: fromEmail,
+        message,
+      };
 
-    sendData(payload);
-    setLoading(false);
-    clearForm();
-    handleClose();
+      sendData(payload);
+
+      clearForm();
+    }
+
+    // handleClose();
+  };
+
+  const recaptchaLoaded = () => {
+    console.log('RECAPTCHA loaded successfully');
+  };
+
+  const verifyCallback = (response) => {
+    if (response) {
+      setIsVerified(true);
+    }
   };
 
   const cancelEmail = () => {
     handleClose();
     clearForm();
   };
+
+  const validateEmail = (mail) => {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+      return true;
+    }
+    return false;
+  };
+
+  console.log('Validate', validateEmail('are@mail'));
 
   return (
     <>
@@ -222,24 +250,28 @@ const ContactModal = ({ open, handleClose, lawyer }) => {
             component='h2'
             style={{ marginBottom: 20 }}
           >
-            Contact Lawyer
+            CONTACT LEGAL REPRESENTATIVE
           </Typography>
           <div>
             <TextField
-              id='outlined-multiline-flexible'
+              id='outlined-error-helper-text'
               label='From'
+              type='email'
+              error={emailError}
+              helperText={
+                emailError ? 'Please enter a valid email address' : ''
+              }
+              required
               fullWidth
               value={fromEmail}
-              onChange={(e) => setFromEmail(e.target.value)}
-              style={{ marginBottom: 20 }}
-            />
-            <TextField
-              id='outlined-multiline-flexible'
-              label='To'
-              fullWidth
-              disabled
-              value={lawyer?.email}
-              onChange={(e) => setToEmail(e.target.value)}
+              onChange={(e) => {
+                setFromEmail(e.target.value);
+                if (!validateEmail(e.target.value)) {
+                  setEmailError(true);
+                } else {
+                  setEmailError(false);
+                }
+              }}
               style={{ marginBottom: 20 }}
             />
           </div>
@@ -249,11 +281,29 @@ const ContactModal = ({ open, handleClose, lawyer }) => {
               id='standard-multiline-flexible'
               label='Message'
               multiline
+              error={messageError}
+              helperText={messageError ? 'Please enter a message' : ''}
+              required
               fullWidth
               rows={9}
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => {
+                setMessage(e.target.value);
+                if (message.length < 0) {
+                  setMessageError(true);
+                } else {
+                  setMessageError(false);
+                }
+              }}
               variant='standard'
+            />
+          </div>
+          <div style={{ marginBottom: 20 }}>
+            <Recaptcha
+              sitekey={`${recaptchaApiKey}`}
+              render='explicit'
+              verifyCallback={verifyCallback}
+              onloadCallback={recaptchaLoaded}
             />
           </div>
           <div
@@ -271,24 +321,14 @@ const ContactModal = ({ open, handleClose, lawyer }) => {
             >
               Close
             </Button>
-            {loading ? (
-              <Button
-                variant='contained'
-                disabled
-                endIcon={<Send />}
-                onClick={sendEmail}
-              >
-                Sending
-              </Button>
-            ) : (
-              <Button
-                variant='contained'
-                endIcon={<Send />}
-                onClick={sendEmail}
-              >
-                Send
-              </Button>
-            )}
+
+            <Button
+              variant='contained'
+              endIcon={loading ? '' : <Send />}
+              onClick={sendEmail}
+            >
+              {loading ? 'Sending...' : 'Send'}
+            </Button>
           </div>
         </Box>
       </Modal>

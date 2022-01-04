@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './SearchPage.css';
-import { useStateValue } from '../StateProvider';
 import { useParams } from 'react-router-dom';
 import SearchInPage from '../components/SearchInPage';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { Paper } from '@mui/material';
 import {
-  Introduction,
   Preliminaries,
   Preamble,
   Chapter_1,
@@ -33,26 +31,33 @@ import {
 
 const ReadSearchResult = () => {
   const { id } = useParams();
+  // const { text } = useParams();
   const history = useHistory();
   const [currentSection, setSection] = useState('');
 
   useEffect(() => {
     setSection(id);
-  }, []);
+  }, [id]);
+
   return (
     <div className='searchPage'>
       <SearchInPage history={history} />
 
       <div className='searchPage__results'>
-        <h2 className=''>{id}</h2>
+        <h4 className='' style={{ textAlign: 'center' }}>
+          {id.toUpperCase()}
+        </h4>
 
-        <SearchResult data={'item'} section={currentSection} />
+        <SearchResult data={id} section={currentSection} history={history} />
       </div>
     </div>
   );
 };
 
-const SearchResult = ({ section }) => {
+const SearchResult = ({ section, data, history }) => {
+  // useEffect(() => {
+  //    history.push(`/result/${data}#:~:text=(i)%20the,society`)
+  // }, [section]);
   return (
     <Paper elevation={3}>
       <div className='browse_contents_data' style={{ padding: '20px 200px' }}>
@@ -60,7 +65,7 @@ const SearchResult = ({ section }) => {
           'National objectives and directive principles of state policy',
         ) && Preamble()}
         {section?.includes('Preliminaries') && Preliminaries()}
-        {section?.includes('Preamble') && Preamble()}
+        {section?.includes('The preamble') && Preamble()}
         {section?.includes('Chapter one') && Chapter_1()}
         {section?.includes('Chapter two') && Chapter_2()}
         {section?.includes('Chapter three') && Chapter_3()}

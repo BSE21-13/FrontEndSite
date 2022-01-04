@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import './Search.css';
-
+import { useDispatch } from 'react-redux';
 import SearchIcon from '@mui/icons-material/Search';
 import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom';
-import { useStateValue } from '../StateProvider';
-import { actionTypes } from '../reducer';
+
+import * as searchActions from '../redux/actions/search';
 
 const Search = ({ hideButtons = false }) => {
-  const [, dispatch] = useStateValue();
-  const [input, setInput] = useState('');
+  // const { searchTerm} = useSelector(state => state.search)
+  // searchTerm !== null ? searchTerm :''
+  const [input, setInput] = useState();
+
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const search = (e) => {
@@ -18,10 +21,7 @@ const Search = ({ hideButtons = false }) => {
     const trimmedInput = input.trim();
 
     if (trimmedInput.length > 2) {
-      dispatch({
-        type: actionTypes.SET_SEARCH_TERM,
-        term: input,
-      });
+      dispatch(searchActions.sendQuery(trimmedInput));
 
       history.push('/search');
     }
@@ -33,6 +33,7 @@ const Search = ({ hideButtons = false }) => {
         <SearchIcon className='search__inputIcon' />
         <input
           type='text'
+          placeholder='Ask the constitution?'
           value={input}
           style={{ marginRight: '5px' }}
           spellCheck='true'
@@ -49,13 +50,13 @@ const Search = ({ hideButtons = false }) => {
             type='submit'
             className='search__buttonsHidden'
           ></Button>
-          <Button
+          {/* <Button
             style={{ borderColor: '#e0e0e0' }}
             variant='outlined'
             onClick={() => history.push('/contact-legal')}
           >
             Need a lawyer?
-          </Button>
+          </Button> */}
         </div>
       ) : (
         <div className='search__buttons'>
