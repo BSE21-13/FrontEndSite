@@ -44,7 +44,9 @@ const ReadSearchResult = () => {
       <SearchInPage history={history} />
 
       <div className='searchPage__results'>
-        <h2 className=''>{id}</h2>
+        <h4 className='' style={{ textAlign: 'center' }}>
+          {id.toUpperCase()}
+        </h4>
 
         <SearchResult data={id} section={currentSection} history={history} />
       </div>
@@ -63,7 +65,7 @@ const SearchResult = ({ section, data, history }) => {
           'National objectives and directive principles of state policy',
         ) && Preamble()}
         {section?.includes('Preliminaries') && Preliminaries()}
-        {section?.includes('Preamble') && Preamble()}
+        {section?.includes('The preamble') && Preamble()}
         {section?.includes('Chapter one') && Chapter_1()}
         {section?.includes('Chapter two') && Chapter_2()}
         {section?.includes('Chapter three') && Chapter_3()}

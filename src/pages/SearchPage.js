@@ -1,26 +1,21 @@
 import React, { useState } from 'react';
 import './SearchPage.css';
-import { useStateValue } from '../StateProvider';
-import useCadiseSearch from '../useCadiseSearch';
 import { useHistory } from 'react-router-dom';
 import { Chip, Paper } from '@mui/material';
 import { Pagination } from '@mui/material';
 import SearchInPage from '../components/SearchInPage';
+import { useSelector } from 'react-redux';
 
 const SearchPage = () => {
-  const [{ term }] = useStateValue();
   const history = useHistory();
-  const data = useCadiseSearch(term);
+  const { loading, data } = useSelector((state) => state.search);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
 
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = data?.data?.results?.slice(
-    indexOfFirstPost,
-    indexOfLastPost,
-  );
+  const currentPosts = data?.results?.slice(indexOfFirstPost, indexOfLastPost);
 
   // Change page
   const handleChange = (event, value) => {
@@ -30,24 +25,20 @@ const SearchPage = () => {
   // Generate pagination numbers
   const pageNumbers = [];
 
-  for (
-    let i = 1;
-    i <= Math.ceil(data?.data?.results?.length / postsPerPage);
-    i++
-  ) {
+  for (let i = 1; i <= Math.ceil(data?.results?.length / postsPerPage); i++) {
     pageNumbers.push(i);
   }
   return (
     <div className='searchPage'>
       <SearchInPage history={history} />
-      {term && (
+      {!loading && (
         <div className='searchPage__results'>
           <div className=''>
-            {data.loading} About {data?.data?.results?.length} results{' '}
+            {data.loading} About {data?.results?.length} results{' '}
           </div>
 
           <div className='chip-stack'>
-            {data?.data?.keywords?.map((item, index) => (
+            {data?.keywords?.map((item, index) => (
               <span key={index} className='chip-item'>
                 {' '}
                 <Chip
@@ -63,7 +54,7 @@ const SearchPage = () => {
             <SearchResult key={index} data={item} history={history} />
           ))}
 
-          {data?.data?.results?.length > 5 && (
+          {data?.results?.length > 5 && (
             <Pagination
               count={pageNumbers?.length}
               page={currentPage}
@@ -77,13 +68,29 @@ const SearchPage = () => {
 };
 
 const SearchResult = ({ data, key, history }) => {
+  const fragmentRef = data.text.split(' ');
+  const fragmentLength = fragmentRef.length;
+
   return (
     <Paper elevation={3}>
       <div
         className='searchPage__result'
-        onClick={() => history.push(`/result/${data?.chapter}`)}
+        // onClick={() => history.push(`/result/${data?.chapter}`)}
       >
-        <h4>{data.chapter}</h4>
+        {/*  */}
+        <a
+          href={`/result/${data?.chapter}#:~:text=${
+            fragmentLength < 6
+              ? data.text
+              : `${fragmentRef?.[0]}%20${fragmentRef?.[1]}%20${
+                  fragmentRef?.[2]
+                },${fragmentRef?.[fragmentLength - 2]}%20${
+                  fragmentRef?.[fragmentLength - 1]
+                }`
+          }`}
+        >
+          <h4>{data.chapter}</h4>
+        </a>
 
         <p className='Snippet'>{data.text}</p>
       </div>
