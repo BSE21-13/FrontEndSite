@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import './SearchPage.css';
 import { useHistory } from 'react-router-dom';
-import { Chip, Paper } from '@mui/material';
-import { Pagination } from '@mui/material';
+import { Pagination, Chip, Paper, Box, Skeleton } from '@mui/material';
 import SearchInPage from '../components/SearchInPage';
 import { useSelector } from 'react-redux';
 
@@ -31,11 +30,9 @@ const SearchPage = () => {
   return (
     <div className='searchPage'>
       <SearchInPage history={history} />
-      {!loading && (
+      {!loading ? (
         <div className='searchPage__results'>
-          <div className=''>
-            {data.loading} About {data?.results?.length} results{' '}
-          </div>
+          <div className=''>About {data?.results?.length} results </div>
 
           <div className='chip-stack'>
             {data?.keywords?.map((item, index) => (
@@ -62,8 +59,49 @@ const SearchPage = () => {
             />
           )}
         </div>
+      ) : (
+        <div className='searchPage__results'>
+          <LoadingSkeleton />
+          <LoadingSkeleton />
+          <LoadingSkeleton />
+        </div>
       )}
     </div>
+  );
+};
+
+const LoadingSkeleton = () => {
+  return (
+    <Paper elevation={3}>
+      <div className='searchPage__result'>
+        <Box sx={{ width: '100%' }}>
+          <Skeleton
+            animation='wave'
+            height={20}
+            width='50%'
+            style={{ marginBottom: 10 }}
+          />
+          <Skeleton
+            animation='wave'
+            height={15}
+            width='100%'
+            style={{ marginBottom: 6 }}
+          />
+          <Skeleton
+            animation='wave'
+            height={15}
+            width='100%'
+            style={{ marginBottom: 6 }}
+          />
+          <Skeleton
+            animation='wave'
+            height={15}
+            width='70%'
+            style={{ marginBottom: 6 }}
+          />
+        </Box>
+      </div>
+    </Paper>
   );
 };
 
