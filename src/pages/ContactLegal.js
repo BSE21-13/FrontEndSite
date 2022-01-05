@@ -3,17 +3,27 @@ import { useSelector, useDispatch } from 'react-redux';
 import './SearchPage.css';
 import Recaptcha from 'react-recaptcha';
 // import SearchIcon from "'@mui/icons-material/Search";
-import { Box, Button, Modal, Typography, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Modal,
+  Typography,
+  TextField,
+  Paper,
+  Skeleton,
+  Alert,
+  CircularProgress,
+  Pagination,
+} from '@mui/material';
 import SearchInPage from '../components/SearchInPage';
 import { PopupButton } from 'react-calendly';
 import { useHistory } from 'react-router-dom';
-import { Paper, Pagination } from '@mui/material';
 import { Send, CancelOutlined } from '@mui/icons-material';
 import * as contactActions from '../redux/actions/contactLegal';
 
 const ContactLegal = () => {
   const dispatch = useDispatch();
-  const { data, loading } = useSelector((state) => state.contactLegal);
+  const { data, loading, success } = useSelector((state) => state.contactLegal);
 
   const history = useHistory();
   const [selectedLawyer, setSelectedLawyer] = useState(null);
@@ -51,32 +61,85 @@ const ContactLegal = () => {
           <h3>Our registered legal support partners.</h3>
         </div>
 
-        {data?.length > 0
-          ? currentItems.map((item) => (
-              <ContactResult
-                key={item._id}
-                data={item}
-                setLawyer={setSelectedLawyer}
-                lawyer={selectedLawyer}
-                dispatch={dispatch}
-                loading={loading}
-              />
-            ))
-          : 'No lawyers list.'}
-
-        {data?.length > 2 && (
-          <Pagination
-            count={pageNumbers?.length}
-            page={currentPage}
-            onChange={handleChange}
-          />
+        {loading ? (
+          <>
+            <LoadingSkeleton />
+            <LoadingSkeleton />
+            <LoadingSkeleton />
+          </>
+        ) : currentItems?.length > 0 ? (
+          currentItems.map((item) => (
+            <ContactResult
+              key={item._id}
+              data={item}
+              setLawyer={setSelectedLawyer}
+              lawyer={selectedLawyer}
+              dispatch={dispatch}
+              loading={loading}
+              success={success}
+            />
+          ))
+        ) : (
+          'No lawyers list.'
         )}
+
+        {loading
+          ? null
+          : data?.length > 2 && (
+              <Pagination
+                count={pageNumbers?.length}
+                page={currentPage}
+                onChange={handleChange}
+              />
+            )}
       </div>
     </div>
   );
 };
 
-const ContactResult = ({ data, setLawyer, lawyer, dispatch, loading }) => {
+const LoadingSkeleton = () => {
+  return (
+    <Paper className='contact__result' variant='outlined'>
+      <Skeleton variant='circular' width={150} height={150} />
+
+      <Box sx={{ width: '80%' }}>
+        <Skeleton
+          animation='wave'
+          height={20}
+          width='50%'
+          style={{ marginBottom: 6 }}
+        />
+        <Skeleton
+          animation='wave'
+          height={20}
+          width='80%'
+          style={{ marginBottom: 6 }}
+        />
+        <Skeleton
+          animation='wave'
+          height={20}
+          width='80%'
+          style={{ marginBottom: 6 }}
+        />
+        <Skeleton
+          animation='wave'
+          height={20}
+          width='80%'
+          style={{ marginBottom: 6 }}
+        />
+      </Box>
+    </Paper>
+  );
+};
+
+const ContactResult = ({
+  data,
+  setLawyer,
+  lawyer,
+  dispatch,
+  loading,
+  success,
+}) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -152,12 +215,20 @@ const ContactResult = ({ data, setLawyer, lawyer, dispatch, loading }) => {
         lawyer={lawyer}
         dispatch={dispatch}
         loading={loading}
+        success={success}
       />
     </>
   );
 };
 
-const ContactModal = ({ open, handleClose, lawyer, dispatch, loading }) => {
+const ContactModal = ({
+  open,
+  handleClose,
+  lawyer,
+  dispatch,
+  loading,
+  success,
+}) => {
   const style = {
     position: 'absolute',
     top: '50%',
@@ -169,6 +240,17 @@ const ContactModal = ({ open, handleClose, lawyer, dispatch, loading }) => {
     boxShadow: 24,
     p: 4,
   };
+
+  const [showAlert, setShowAlert] = useState(false);
+  useEffect(() => {
+    setShowAlert(false);
+  }, []);
+
+  useEffect(() => {
+    if (success?.message === 'Email submitted successfully') {
+      setShowAlert(true);
+    }
+  }, [success?.status]);
 
   const [fromEmail, setFromEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -223,6 +305,7 @@ const ContactModal = ({ open, handleClose, lawyer, dispatch, loading }) => {
 
   const cancelEmail = () => {
     handleClose();
+    setShowAlert(false);
     clearForm();
   };
 
@@ -233,17 +316,21 @@ const ContactModal = ({ open, handleClose, lawyer, dispatch, loading }) => {
     return false;
   };
 
-  console.log('Validate', validateEmail('are@mail'));
-
   return (
     <>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={() => {
+          handleClose();
+          setShowAlert(false);
+        }}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
+          {showAlert && (
+            <Alert severity='success'>Email sent successfully.</Alert>
+          )}
           <Typography
             id='modal-modal-title'
             variant='h6'
@@ -325,6 +412,9 @@ const ContactModal = ({ open, handleClose, lawyer, dispatch, loading }) => {
             <Button
               variant='contained'
               endIcon={loading ? '' : <Send />}
+              startIcon={
+                loading && <CircularProgress color='inherit' size={20} />
+              }
               onClick={sendEmail}
             >
               {loading ? 'Sending...' : 'Send'}
