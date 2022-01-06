@@ -1,14 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import './SearchPage.css';
-
-// import SearchIcon from "@material-ui/icons/Search";
-import { Box, Button, Modal, Typography, TextField } from '@material-ui/core';
+import Recaptcha from 'react-recaptcha';
+// import SearchIcon from "'@mui/icons-material/Search";
+import {
+  Box,
+  Button,
+  Modal,
+  Typography,
+  TextField,
+  Paper,
+  Skeleton,
+  Alert,
+  CircularProgress,
+  Pagination,
+} from '@mui/material';
 import SearchInPage from '../components/SearchInPage';
+import { PopupButton } from 'react-calendly';
 import { useHistory } from 'react-router-dom';
-import { Paper } from '@material-ui/core';
+import { Send, CancelOutlined } from '@mui/icons-material';
+import * as contactActions from '../redux/actions/contactLegal';
 
 const ContactLegal = () => {
+  const dispatch = useDispatch();
+  const { data, loading, success } = useSelector((state) => state.contactLegal);
+
   const history = useHistory();
+  const [selectedLawyer, setSelectedLawyer] = useState(null);
+
+  useEffect(() => {
+    dispatch(contactActions.getLegal());
+  }, []);
+
+  // Pagination control
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(2);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const handleChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
+  // Generate pagination numbers
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(data?.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <div className='searchPage'>
@@ -19,55 +61,174 @@ const ContactLegal = () => {
           <h3>Our registered legal support partners.</h3>
         </div>
 
-        <ContactResult data={'item'} />
-        <ContactResult data={'item'} />
-        <ContactResult data={'item'} />
-        <ContactResult data={'item'} />
+        {loading ? (
+          <>
+            <LoadingSkeleton />
+            <LoadingSkeleton />
+            <LoadingSkeleton />
+          </>
+        ) : currentItems?.length > 0 ? (
+          currentItems.map((item) => (
+            <ContactResult
+              key={item._id}
+              data={item}
+              setLawyer={setSelectedLawyer}
+              lawyer={selectedLawyer}
+              dispatch={dispatch}
+              loading={loading}
+              success={success}
+            />
+          ))
+        ) : (
+          'No lawyers list.'
+        )}
+
+        {loading
+          ? null
+          : data?.length > 2 && (
+              <Pagination
+                count={pageNumbers?.length}
+                page={currentPage}
+                onChange={handleChange}
+              />
+            )}
       </div>
     </div>
   );
 };
 
-const ContactResult = () => {
+const LoadingSkeleton = () => {
+  return (
+    <Paper className='contact__result' variant='outlined'>
+      <Skeleton variant='circular' width={150} height={150} />
+
+      <Box sx={{ width: '80%' }}>
+        <Skeleton
+          animation='wave'
+          height={20}
+          width='50%'
+          style={{ marginBottom: 6 }}
+        />
+        <Skeleton
+          animation='wave'
+          height={20}
+          width='80%'
+          style={{ marginBottom: 6 }}
+        />
+        <Skeleton
+          animation='wave'
+          height={20}
+          width='80%'
+          style={{ marginBottom: 6 }}
+        />
+        <Skeleton
+          animation='wave'
+          height={20}
+          width='80%'
+          style={{ marginBottom: 6 }}
+        />
+      </Box>
+    </Paper>
+  );
+};
+
+const ContactResult = ({
+  data,
+  setLawyer,
+  lawyer,
+  dispatch,
+  loading,
+  success,
+}) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const overlalySettings = {
+    backgroundColor: 'ffffff',
+    hideEventTypeDetails: false,
+    hideGdprBanner: true,
+    hideLandingPageDetails: true,
+    primaryColor: '0057FF',
+    textColor: '4d5055',
+  };
+
+  const prefillData = {
+    date: new Date(),
+    email: ' ',
+    firstName: '',
+    lastName: '',
+    name: '',
+  };
   return (
     <>
       <Paper className='contact__result' variant='outlined'>
         <div className='contact__bio'>
           <img
-            src={'https://ui-avatars.com/api/?background=random'}
+            src={`https://ui-avatars.com/api/?name=${data?.name}&bold=true`}
             className='contact__image'
             alt='Lawyer Dp'
           />
           <div className='contact__credentials'>
-            <h4 className='Snippet'>Lawyer Name</h4>
+            <h4 className='Snippet'>{data.name}</h4>
             <p className='Snippet'>
-              +256 56789987 | +256 56789987 | +256 56789987
+              {data?.phone?.map((item) => `${item} | `)}
             </p>
-            <p className='Snippet'>Kamapla Advocates</p>
-            <p className='Snippet'>kampalaadvocates@gmail.com</p>
+            <p className='Snippet'>{data.firm_name}</p>
+            <p className='Snippet'>{data.email}</p>
           </div>
         </div>
 
-        <div className='home__headerLeft'>
+        <div
+          className='home__headerLeft'
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}
+        >
+          <PopupButton
+            className='calendlyButton'
+            style={{ margin: 10, width: '100%' }}
+            pageSettings={overlalySettings}
+            prefill={prefillData}
+            text='Make Appointment'
+            url={data.calendly_link}
+          />
           <Button
-            style={{ backgroundColor: '#f7f7f7' }}
-            variant='outlined'
-            onClick={handleOpen}
+            style={{ margin: 10, width: '100%' }}
+            variant='contained'
+            disableElevation
+            color='info'
+            onClick={() => {
+              setLawyer(data);
+              handleOpen();
+            }}
           >
             send email
           </Button>
         </div>
       </Paper>
-      <ContactModal open={open} handleClose={handleClose} />
+      <ContactModal
+        open={open}
+        handleClose={handleClose}
+        lawyer={lawyer}
+        dispatch={dispatch}
+        loading={loading}
+        success={success}
+      />
     </>
   );
 };
 
-const ContactModal = ({ open, handleClose }) => {
+const ContactModal = ({
+  open,
+  handleClose,
+  lawyer,
+  dispatch,
+  loading,
+  success,
+}) => {
   const style = {
     position: 'absolute',
     top: '50%',
@@ -80,56 +241,184 @@ const ContactModal = ({ open, handleClose }) => {
     p: 4,
   };
 
-  const [value, setValue] = React.useState('Controlled');
+  const [showAlert, setShowAlert] = useState(false);
+  useEffect(() => {
+    setShowAlert(false);
+  }, []);
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
+  useEffect(() => {
+    if (success?.message === 'Email submitted successfully') {
+      setShowAlert(true);
+    }
+  }, [success?.status]);
+
+  const [fromEmail, setFromEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [emailError, setEmailError] = useState(false);
+  const [messageError, setMessageError] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+
+  const recaptchaApiKey = `${process.env.REACT_APP_RECAPTCHA_API_KEY}`;
+
+  const sendData = async (payload) => {
+    if (isVerified) {
+      dispatch(contactActions.sendEmail(payload));
+      setIsVerified(false);
+    } else {
+      window.alert('Please verify that your are a human.');
+    }
+  };
+
+  const clearForm = () => {
+    setFromEmail('');
+    setMessage('');
+    setEmailError(false);
+    setMessageError(false);
+  };
+
+  const sendEmail = () => {
+    let trimMessage = message.trim();
+    if (!emailError && trimMessage.length > 0) {
+      const payload = {
+        to_email: lawyer?.email,
+        from_email: fromEmail,
+        message,
+      };
+
+      sendData(payload);
+
+      clearForm();
+    }
+
+    // handleClose();
+  };
+
+  const recaptchaLoaded = () => {
+    console.log('RECAPTCHA loaded successfully');
+  };
+
+  const verifyCallback = (response) => {
+    if (response) {
+      setIsVerified(true);
+    }
+  };
+
+  const cancelEmail = () => {
+    handleClose();
+    setShowAlert(false);
+    clearForm();
+  };
+
+  const validateEmail = (mail) => {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+      return true;
+    }
+    return false;
   };
 
   return (
     <>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={() => {
+          handleClose();
+          setShowAlert(false);
+        }}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <Typography id='modal-modal-title' variant='h6' component='h2'>
-            Contact Lawyer
+          {showAlert && (
+            <Alert severity='success'>Email sent successfully.</Alert>
+          )}
+          <Typography
+            id='modal-modal-title'
+            variant='h6'
+            component='h2'
+            style={{ marginBottom: 20 }}
+          >
+            CONTACT LEGAL REPRESENTATIVE
           </Typography>
           <div>
             <TextField
-              id='outlined-multiline-flexible'
+              id='outlined-error-helper-text'
               label='From'
+              type='email'
+              error={emailError}
+              helperText={
+                emailError ? 'Please enter a valid email address' : ''
+              }
+              required
               fullWidth
-              value={value}
-              onChange={handleChange}
-            />
-            <TextField
-              id='outlined-multiline-flexible'
-              label='To'
-              fullWidth
-              value={value}
-              onChange={handleChange}
+              value={fromEmail}
+              onChange={(e) => {
+                setFromEmail(e.target.value);
+                if (!validateEmail(e.target.value)) {
+                  setEmailError(true);
+                } else {
+                  setEmailError(false);
+                }
+              }}
+              style={{ marginBottom: 20 }}
             />
           </div>
 
-          <div>
+          <div style={{ marginBottom: 20 }}>
             <TextField
               id='standard-multiline-flexible'
               label='Message'
               multiline
+              error={messageError}
+              helperText={messageError ? 'Please enter a message' : ''}
+              required
               fullWidth
               rows={9}
-              value={value}
-              onChange={handleChange}
+              value={message}
+              onChange={(e) => {
+                setMessage(e.target.value);
+                if (message.length < 0) {
+                  setMessageError(true);
+                } else {
+                  setMessageError(false);
+                }
+              }}
               variant='standard'
             />
           </div>
-          <div>
-            <Button variant='outlined'>Cancel</Button>
-            <Button variant='outlined'>Send</Button>
+          <div style={{ marginBottom: 20 }}>
+            <Recaptcha
+              sitekey={`${recaptchaApiKey}`}
+              render='explicit'
+              verifyCallback={verifyCallback}
+              onloadCallback={recaptchaLoaded}
+            />
+          </div>
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Button
+              color='error'
+              variant='outlined'
+              endIcon={<CancelOutlined />}
+              onClick={cancelEmail}
+            >
+              Close
+            </Button>
+
+            <Button
+              variant='contained'
+              endIcon={loading ? '' : <Send />}
+              startIcon={
+                loading && <CircularProgress color='inherit' size={20} />
+              }
+              onClick={sendEmail}
+            >
+              {loading ? 'Sending...' : 'Send'}
+            </Button>
           </div>
         </Box>
       </Modal>
