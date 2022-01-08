@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './SearchPage.css';
 import Recaptcha from 'react-recaptcha';
-// import SearchIcon from "'@mui/icons-material/Search";
 import {
   Box,
   Button,
@@ -34,12 +33,12 @@ const ContactLegal = () => {
 
   // Pagination control
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(2);
+  const ITEMS_PER_PAGE = 2;
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem);
-
+  console.log('currentItems', currentItems);
   // Change page
   const handleChange = (event, value) => {
     setCurrentPage(value);
@@ -48,7 +47,7 @@ const ContactLegal = () => {
   // Generate pagination numbers
   const pageNumbers = [];
 
-  for (let i = 1; i <= Math.ceil(data?.length / itemsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(data?.length / ITEMS_PER_PAGE); i++) {
     pageNumbers.push(i);
   }
 
@@ -62,11 +61,10 @@ const ContactLegal = () => {
         </div>
 
         {loading ? (
-          <>
+          <div>
             <LoadingSkeleton />
             <LoadingSkeleton />
-            <LoadingSkeleton />
-          </>
+          </div>
         ) : currentItems?.length > 0 ? (
           currentItems.map((item) => (
             <ContactResult
@@ -100,7 +98,12 @@ const ContactLegal = () => {
 const LoadingSkeleton = () => {
   return (
     <Paper className='contact__result' variant='outlined'>
-      <Skeleton variant='circular' width={150} height={150} />
+      <Skeleton
+        variant='circular'
+        width={150}
+        height={150}
+        style={{ marginRight: '20px' }}
+      />
 
       <Box sx={{ width: '80%' }}>
         <Skeleton
@@ -168,6 +171,7 @@ const ContactResult = ({
             src={`https://ui-avatars.com/api/?name=${data?.name}&bold=true`}
             className='contact__image'
             alt='Lawyer Dp'
+            loading='lazy'
           />
           <div className='contact__credentials'>
             <h4 className='Snippet'>{data.name}</h4>
