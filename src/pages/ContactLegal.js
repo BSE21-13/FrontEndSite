@@ -254,7 +254,7 @@ const ContactModal = ({
     if (success?.message === 'Email submitted successfully') {
       setShowAlert(true);
     }
-  }, [success?.status]);
+  }, [success.status, success.message]);
 
   const [fromEmail, setFromEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -314,7 +314,7 @@ const ContactModal = ({
   };
 
   const validateEmail = (mail) => {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+    if (/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
       return true;
     }
     return false;
