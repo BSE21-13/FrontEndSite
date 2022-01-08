@@ -1,4 +1,8 @@
 import React from 'react';
+import Arikosi from '../images/arikosi.PNG';
+import Karungi from '../images/lydia.PNG';
+import Mwanje from '../images/mwanje.PNG';
+import Kabahi from '../images/rovence.PNG';
 
 export const Introduction = () => {
   return (
@@ -14892,3 +14896,34 @@ export const Schedules = () => {
     </>
   );
 };
+
+export const DevTeam = [
+  {
+    name: 'Arikosi Michael Okurut',
+    description: 'This is a sample descrtiption',
+    image: Arikosi,
+    github: 'https://github.com/michael-aries11',
+    linkedIn: 'https://www.linkedin.com/in/michael-arikosi-578556184/',
+  },
+  {
+    name: 'Karungi Lydia',
+    description: 'This is a sample descrtiption',
+    image: Karungi,
+    github: 'https://github.com/lidik',
+    linkedIn: 'https://www.linkedin.com/in/lydia-karungi-b1255b192/',
+  },
+  {
+    name: 'Mwanje Mike',
+    description: 'This is a sample descrtiption',
+    image: Mwanje,
+    github: 'https://github.com/123MwanjeMike',
+    linkedIn: 'https://www.linkedin.com/in/mike-mwanje-470b15155/',
+  },
+  {
+    name: 'Kabahinda Rovence',
+    description: 'This is a sample descrtiption',
+    image: Kabahi,
+    github: 'https://github.com/Kabahindarovence13',
+    linkedIn: 'https://www.linkedin.com/in/kabahinda-rovence-53971a197/',
+  },
+];
