@@ -259,6 +259,7 @@ const ContactModal = ({
   const [isVerified, setIsVerified] = useState(false);
 
   const recaptchaApiKey = `${process.env.REACT_APP_RECAPTCHA_API_KEY}`;
+  console.log(recaptchaApiKey)
 
   const sendData = async (payload) => {
     if (isVerified) {
