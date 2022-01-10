@@ -3,7 +3,6 @@ import './SearchPage.css';
 import { useHistory } from 'react-router-dom';
 import SearchInPage from '../components/SearchInPage';
 import {
-  ImageList,
   ImageListItem,
   ImageListItemBar,
   ListSubheader,
@@ -13,7 +12,6 @@ import {
   MenuList,
   ListItemIcon,
   MenuItem,
-  Avatar,
   Card,
   CardContent,
   CardActions,
@@ -123,6 +121,7 @@ const DevelopmentTeam = ({ team }) => {
                     style={{ textDecoration: 'none' }}
                     href={person.github}
                     target='_blank'
+                    rel='noopener noreferrer'
                   >
                     {' '}
                     <Button size='small'>GitHub</Button>
@@ -131,6 +130,8 @@ const DevelopmentTeam = ({ team }) => {
                     style={{ textDecoration: 'none' }}
                     href={person.linkedIn}
                     target='_blank'
+                    rel='noopener noreferrer'
+                    s
                   >
                     <Button size='small'>LinkedIn</Button>{' '}
                   </a>

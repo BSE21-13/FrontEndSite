@@ -29,7 +29,7 @@ const ContactLegal = () => {
 
   useEffect(() => {
     dispatch(contactActions.getLegal());
-  }, []);
+  }, [dispatch]);
 
   // Pagination control
   const [currentPage, setCurrentPage] = useState(1);
