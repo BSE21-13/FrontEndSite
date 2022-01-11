@@ -51,7 +51,7 @@ export const sendEmail = (payload) => async (dispatch, getState) => {
       type: contactLegalTypes.CONTACT_LEGAL_ERROR,
       payload: {
         error: true,
-        errorMessage: result?.error,
+        errorMessage: 'Failed to send Email',
       },
     });
   }
