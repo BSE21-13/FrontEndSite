@@ -29,8 +29,11 @@ const ContactLegal = () => {
 
   useEffect(() => {
     dispatch(contactActions.getLegal());
+
   }, []);
 
+
+  console.log('Test Key Log >> ', process.env.RECAPTCHA_SITE_KEY)
   // Pagination control
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 2;
@@ -405,7 +408,7 @@ const ContactModal = ({
           </div>
           <div style={{ marginBottom: 20 }}>
             <Recaptcha
-              sitekey={`${recaptchaApiKey}`}
+              sitekey={`6LcnNeMdAAAAAIZRtw954_8CTnU_UoHcQldCw66W`}
               render='explicit'
               verifyCallback={verifyCallback}
               onloadCallback={recaptchaLoaded}
