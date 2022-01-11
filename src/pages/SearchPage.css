@@ -232,3 +232,9 @@
   border: 1px solid rgba(25, 118, 210, 0.5);
   color: #1976d2;
 }
+
+.chapter_title {
+  color: #000000;
+  font-weight: 700;
+  font-size: 12pt;
+}
