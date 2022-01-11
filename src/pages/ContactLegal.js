@@ -29,7 +29,7 @@ const ContactLegal = () => {
 
   useEffect(() => {
     dispatch(contactActions.getLegal());
-  }, [dispatch]);
+  });
 
   // Pagination control
   const [currentPage, setCurrentPage] = useState(1);
@@ -254,7 +254,7 @@ const ContactModal = ({
     if (success?.message === 'Email submitted successfully') {
       setShowAlert(true);
     }
-  }, [success.status, success.message]);
+  }, [success]);
 
   const [fromEmail, setFromEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -263,6 +263,12 @@ const ContactModal = ({
   const [isVerified, setIsVerified] = useState(false);
 
   const recaptchaApiKey = `${process.env.REACT_APP_RECAPTCHA_API_KEY}`;
+  console.log('1. This is an API key', recaptchaApiKey);
+  console.log('2. This is an API key', process.env.REACT_APP_RECAPTCHA_API_KEY);
+  console.log(
+    '3. This is an Backend API URL',
+    process.env.REACT_APP_BACKEND_URL,
+  );
 
   const sendData = async (payload) => {
     if (isVerified) {
