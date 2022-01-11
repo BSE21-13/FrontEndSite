@@ -130,3 +130,6 @@ drivers
 
 # ignore files with .DS_Store created by mac users
 .DS_Store
+
+/tests/*/__init__.py
+/tests/venv/
