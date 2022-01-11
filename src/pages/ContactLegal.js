@@ -398,7 +398,7 @@ const ContactModal = ({
           </div>
           <div style={{ marginBottom: 20 }}>
             <Recaptcha
-              sitekey={`${recaptchaApiKey}`}
+              sitekey={`6LcnNeMdAAAAAIZRtw954_8CTnU_UoHcQldCw66W`}
               render='explicit'
               verifyCallback={verifyCallback}
               onloadCallback={recaptchaLoaded}
