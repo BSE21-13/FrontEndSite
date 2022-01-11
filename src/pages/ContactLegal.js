@@ -29,8 +29,9 @@ const ContactLegal = () => {
 
   useEffect(() => {
     dispatch(contactActions.getLegal());
-  });
+  },[]);
 
+  console.log('Test Key Log >> ', process.env.RECAPTCHA_SITE_KEY)
   // Pagination control
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 2;
