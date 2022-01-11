@@ -66,10 +66,7 @@ const ReadSearchResult = () => {
   );
 };
 
-const SearchResult = ({ section, data, history }) => {
-  // useEffect(() => {
-  //    history.push(`/result/${data}#:~:text=(i)%20the,society`)
-  // }, [section]);
+const SearchResult = ({ section }) => {
   return (
     <Paper elevation={3}>
       <div className='browse_contents_data' style={{ padding: '20px 200px' }}>

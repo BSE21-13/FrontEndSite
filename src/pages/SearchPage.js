@@ -105,17 +105,13 @@ const LoadingSkeleton = () => {
   );
 };
 
-const SearchResult = ({ data, key, history }) => {
+const SearchResult = ({ data }) => {
   const fragmentRef = data.text.split(' ');
   const fragmentLength = fragmentRef.length;
 
   return (
     <Paper elevation={3}>
-      <div
-        className='searchPage__result'
-        // onClick={() => history.push(`/result/${data?.chapter}`)}
-      >
-        {/*  */}
+      <div className='searchPage__result'>
         <a
           href={`/result/${data?.chapter}#:~:text=${
             fragmentLength < 6

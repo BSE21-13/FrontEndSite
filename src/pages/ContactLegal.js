@@ -29,11 +29,9 @@ const ContactLegal = () => {
 
   useEffect(() => {
     dispatch(contactActions.getLegal());
-
   }, []);
 
-
-  console.log('Test Key Log >> ', process.env.RECAPTCHA_SITE_KEY)
+  console.log('Test Key Log >> ', process.env.RECAPTCHA_SITE_KEY);
   // Pagination control
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 2;
@@ -273,7 +271,7 @@ const ContactModal = ({
   const [messageError, setMessageError] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
 
-  const recaptchaApiKey = `${process.env.REACT_APP_RECAPTCHA_API_KEY}`;
+  // const recaptchaApiKey = `${process.env.REACT_APP_RECAPTCHA_API_KEY}`;
 
   const sendData = (payload) => {
     if (isVerified) {

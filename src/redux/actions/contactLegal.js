@@ -2,7 +2,7 @@ import * as contactLegalTypes from '../types/contactLegal';
 import * as fetchFunctions from '../../api/index';
 import contactLegalEndpoints from '../endpoints/contactLegal';
 
-export const getLegal = () => async (dispatch, getState) => {
+export const getLegal = () => async (dispatch) => {
   dispatch({
     type: contactLegalTypes.CONTACT_LEGAL_LOADING,
   });
@@ -26,7 +26,7 @@ export const getLegal = () => async (dispatch, getState) => {
   }
 };
 
-export const sendEmail = (payload) => async (dispatch, getState) => {
+export const sendEmail = (payload) => async (dispatch) => {
   dispatch({
     type: contactLegalTypes.CONTACT_LEGAL_LOADING,
   });
