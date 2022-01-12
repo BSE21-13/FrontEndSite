@@ -1,6 +1,6 @@
 # Getting Started with Create React App
 
-CONSTITUIONAL AWARENESS THROUGH A DEDICATED INTELLIGENT SEARCH ENGINE (CADISE)
+CONSTITUIONAL AWARENESS DEDICATED INTELLIGENT SEARCH ENGINE (CADISE)
 
 This system enables easy querying of the constitutional information
 as and when needed by the user. The solution has been achieved greatly by the use of machine

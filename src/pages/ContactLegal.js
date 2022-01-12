@@ -29,8 +29,9 @@ const ContactLegal = () => {
 
   useEffect(() => {
     dispatch(contactActions.getLegal());
-  }, [dispatch]);
+  }, []);
 
+  console.log('Test Key Log >> ', process.env.RECAPTCHA_SITE_KEY);
   // Pagination control
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 2;
@@ -38,7 +39,6 @@ const ContactLegal = () => {
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem);
-  console.log('currentItems', currentItems);
   // Change page
   const handleChange = (event, value) => {
     setCurrentPage(value);
@@ -60,7 +60,7 @@ const ContactLegal = () => {
           <h3>Our registered legal support partners.</h3>
         </div>
 
-        {loading ? (
+        {loading && currentItems?.length === 0 ? (
           <div>
             <LoadingSkeleton />
             <LoadingSkeleton />
@@ -233,6 +233,7 @@ const ContactModal = ({
   loading,
   success,
 }) => {
+  const { errorMessage } = useSelector((state) => state.contactLegal);
   const style = {
     position: 'absolute',
     top: '50%',
@@ -246,15 +247,23 @@ const ContactModal = ({
   };
 
   const [showAlert, setShowAlert] = useState(false);
+  const [sendEmailError, setError] = useState(false);
+
   useEffect(() => {
     setShowAlert(false);
+    setError(false);
   }, []);
+  console.log(sendEmailError);
 
   useEffect(() => {
     if (success?.message === 'Email submitted successfully') {
       setShowAlert(true);
+      setError(false);
+    } else if (errorMessage === 'Failed to send Email') {
+      setShowAlert(true);
+      setError(true);
     }
-  }, [success.status, success.message]);
+  }, [success, errorMessage]);
 
   const [fromEmail, setFromEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -262,9 +271,9 @@ const ContactModal = ({
   const [messageError, setMessageError] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
 
-  const recaptchaApiKey = `${process.env.REACT_APP_RECAPTCHA_API_KEY}`;
+  // const recaptchaApiKey = `${process.env.REACT_APP_RECAPTCHA_API_KEY}`;
 
-  const sendData = async (payload) => {
+  const sendData = (payload) => {
     if (isVerified) {
       dispatch(contactActions.sendEmail(payload));
       setIsVerified(false);
@@ -310,6 +319,7 @@ const ContactModal = ({
   const cancelEmail = () => {
     handleClose();
     setShowAlert(false);
+    setError(false);
     clearForm();
   };
 
@@ -327,13 +337,18 @@ const ContactModal = ({
         onClose={() => {
           handleClose();
           setShowAlert(false);
+          setError(false);
         }}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
           {showAlert && (
-            <Alert severity='success'>Email sent successfully.</Alert>
+            <Alert severity={sendEmailError ? 'error' : 'success'}>
+              {sendEmailError
+                ? 'Failed to send email. Try again later.'
+                : 'Email sent successfully.'}
+            </Alert>
           )}
           <Typography
             id='modal-modal-title'
@@ -341,7 +356,7 @@ const ContactModal = ({
             component='h2'
             style={{ marginBottom: 20 }}
           >
-            CONTACT LEGAL REPRESENTATIVE
+            {`Contact ${lawyer?.name}`}
           </Typography>
           <div>
             <TextField
@@ -391,7 +406,7 @@ const ContactModal = ({
           </div>
           <div style={{ marginBottom: 20 }}>
             <Recaptcha
-              sitekey={`${recaptchaApiKey}`}
+              sitekey={`6LcnNeMdAAAAAIZRtw954_8CTnU_UoHcQldCw66W`}
               render='explicit'
               verifyCallback={verifyCallback}
               onloadCallback={recaptchaLoaded}
