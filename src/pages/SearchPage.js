@@ -4,6 +4,8 @@ import { useHistory } from 'react-router-dom';
 import { Pagination, Chip, Paper, Box, Skeleton } from '@mui/material';
 import SearchInPage from '../components/SearchInPage';
 import { useSelector } from 'react-redux';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 const SearchPage = () => {
   const history = useHistory();
@@ -32,7 +34,9 @@ const SearchPage = () => {
       <SearchInPage history={history} />
       {!loading ? (
         <div className='searchPage__results'>
-          <div className=''>About {data?.results?.length} results </div>
+          <div className=''>
+            {`About ${data?.results?.length} results in ${data?.time} seconds`}
+          </div>
 
           <div className='chip-stack'>
             {data?.keywords?.map((item, index) => (
@@ -46,10 +50,20 @@ const SearchPage = () => {
               </span>
             ))}
           </div>
-
-          {currentPosts?.map((item, index) => (
-            <SearchResult key={index} data={item} history={history} />
-          ))}
+          {currentPosts?.length > 0 ? (
+            currentPosts?.map((item, index) => (
+              <SearchResult key={index} data={item} history={history} />
+            ))
+          ) : (
+            <Alert
+              variant='filled'
+              severity='warning'
+              style={{ marginTop: 10 }}
+            >
+              <AlertTitle>Sorry! No results found.</AlertTitle>
+              Please try another question
+            </Alert>
+          )}
 
           {data?.results?.length > 5 && (
             <Pagination

@@ -271,7 +271,7 @@ const ContactModal = ({
   const [messageError, setMessageError] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
 
-  // const recaptchaApiKey = `${process.env.REACT_APP_RECAPTCHA_API_KEY}`;
+  const recaptchaApiKey = `${process.env.REACT_APP_RECAPTCHA_API_KEY}`;
 
   const sendData = (payload) => {
     if (isVerified) {
@@ -406,7 +406,7 @@ const ContactModal = ({
           </div>
           <div style={{ marginBottom: 20 }}>
             <Recaptcha
-              sitekey={`6LcnNeMdAAAAAIZRtw954_8CTnU_UoHcQldCw66W`}
+              sitekey={recaptchaApiKey}
               render='explicit'
               verifyCallback={verifyCallback}
               onloadCallback={recaptchaLoaded}
