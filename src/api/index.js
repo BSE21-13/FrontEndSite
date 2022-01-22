@@ -52,7 +52,7 @@ export const postData = async (url = '', data, authToken) => {
     }
 
     if (authToken) {
-      fetchHeaders.Authorization = `Bearer ${authToken}`;
+      fetchHeaders.Authorization = `ApiKey ${authToken}`;
     }
 
     let response = await fetch(url, {
