@@ -2,7 +2,7 @@ import * as searchTypes from '../types/search';
 import * as fetchFunctions from '../../api/index';
 import searchEndpoints from '../endpoints/search';
 
-export const sendQuery = (term) => async (dispatch, getState) => {
+export const sendQuery = (term) => async (dispatch) => {
   dispatch({
     type: searchTypes.SEARCH_LOADING,
   });
