@@ -23,7 +23,6 @@ const Search = ({ hideButtons = false }) => {
 
     if (trimmedInput.length > 2) {
       dispatch(searchActions.sendQuery(trimmedInput));
-      console.log('This is the trimmed input', trimmedInput);
       history.push('/search');
     }
   };

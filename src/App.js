@@ -35,7 +35,7 @@ function App() {
               <Route exact path='/help' component={HelpPage} />
 
               {/* contact page (the result page) */}
-              {/* <Route exact path='/contact-legal' component={ContactLegal} /> */}
+              <Route exact path='/contact-legal' component={ContactLegal} />
 
               {/* search page (the result page) */}
               <Route exact path='/' component={Home} />

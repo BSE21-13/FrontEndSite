@@ -1,17 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SearchPage.css';
 import { useHistory } from 'react-router-dom';
 import { Pagination, Chip, Paper, Box, Skeleton } from '@mui/material';
 import SearchInPage from '../components/SearchInPage';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import * as fetchFunctions from '../api/index';
+import * as searchActions from '../redux/actions/search';
 
 const SearchPage = () => {
   const history = useHistory();
   const { loading, data } = useSelector((state) => state.search);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
+  const [suggestions, setSuggestions] = useState(null);
+
+  const getSuggestions = () => {
+    fetchFunctions
+      .getData(
+        `${ELASTIC_SEARCH}cadise_autosuggest_appp/queries/_search`,
+
+        API_KEY,
+      )
+      .then((res) => {
+        setSuggestions(res.data.hits.hits);
+      });
+  };
+
+  const ELASTIC_SEARCH = process.env.REACT_APP_ELASTIC_SEARCH_ENDPOINT;
+  const API_KEY = `${process.env.REACT_APP_ELASTIC_SEARCH_API_ENCODED}`;
 
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
@@ -23,12 +41,25 @@ const SearchPage = () => {
     setCurrentPage(value);
   };
 
+  useEffect(() => {
+    getSuggestions();
+  }, []);
+
   // Generate pagination numbers
   const pageNumbers = [];
+
+  const dispatch = useDispatch();
+  const search = (text) => {
+    const trimmedInput = text.trim();
+    if (trimmedInput.length > 2) {
+      dispatch(searchActions.sendQuery(trimmedInput));
+    }
+  };
 
   for (let i = 1; i <= Math.ceil(data?.results?.length / postsPerPage); i++) {
     pageNumbers.push(i);
   }
+
   return (
     <div className='searchPage'>
       <SearchInPage history={history} />
@@ -55,14 +86,31 @@ const SearchPage = () => {
               <SearchResult key={index} data={item} history={history} />
             ))
           ) : (
-            <Alert
-              variant='filled'
-              severity='warning'
-              style={{ marginTop: 10 }}
-            >
-              <AlertTitle>Sorry! No results found.</AlertTitle>
-              Please try another question
-            </Alert>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <Alert
+                variant='filled'
+                severity='warning'
+                style={{ marginTop: 10 }}
+              >
+                <AlertTitle>Sorry! No results found.</AlertTitle>
+                Please try another question
+              </Alert>
+              <div>
+                <h6 style={{ marginBottom: 5 }}>People usually ask</h6>
+                {suggestions?.map((item) => (
+                  <span key={item._id} className='chip-item'>
+                    <Chip
+                      label={item._source.fullText}
+                      // variant='outlined'
+                      color='info'
+                      onClick={() => search(`${item._source.fullText}`)}
+                      style={{ marginBottom: 5, marginRight: 2 }}
+                      size='medium'
+                    />
+                  </span>
+                ))}
+              </div>
+            </div>
           )}
 
           {data?.results?.length > 5 && (

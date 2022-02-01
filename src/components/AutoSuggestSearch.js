@@ -48,7 +48,6 @@ class AutoComplete extends React.Component {
         API_KEY,
       )
       .then((res) => {
-        console.log('RESPONSE >>>', res);
         const results = res.response.hits.hits.map((h) => h._source);
         this.setState({ suggestions: results });
       });

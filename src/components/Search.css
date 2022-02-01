@@ -117,7 +117,7 @@
   padding: 0;
   background-color: #fff;
   list-style-type: none;
-  width: 220px;
+  width: 200%;
   border: 1px solid #eee;
 }
 
@@ -125,7 +125,7 @@
   cursor: pointer;
   padding: 10px;
   border-bottom: 1px solid #eee;
-  width: 200px;
+  width: 96%;
   white-space: nowrap;
 }
 
@@ -138,13 +138,6 @@
   align-items: center;
   justify-content: space-between;
   font-size: 80%;
-}
-
-.shortCode {
-  background-color: #4696ec;
-  color: #fff;
-  padding: 4px;
-  border-radius: 2px;
 }
 
 .highlight {

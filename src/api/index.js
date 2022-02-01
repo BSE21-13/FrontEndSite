@@ -10,7 +10,7 @@ export const getData = async (url = '', authToken) => {
     if (!authToken) {
       response = await fetch(url);
     } else {
-      fetchHeaders.Authorization = `Bearer ${authToken}`;
+      fetchHeaders.Authorization = `ApiKey ${authToken}`;
       response = await fetch(url, {
         headers: { ...fetchHeaders },
         signal,
