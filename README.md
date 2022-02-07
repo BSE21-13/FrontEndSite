@@ -10,4 +10,4 @@ The system is projected to be a time-saving data retrieval tool for legal inform
 for academic and professional use. It should also be easily scaled up to a variety of information
 source
 
-Staging: https://frontend-staging-46vvqxzipa-uc.a.run.app
+Staging: https://cadise-staging-46vvqxzipa-uc.a.run.app/
