@@ -17,7 +17,7 @@ const HeaderButtonGroup = () => {
           BROWSE THE CONSTITUTION
         </Button>
       </div>
-      <div className='search__buttons' style={{ marginTop: '0px' }}>
+      {/* <div className='search__buttons' style={{ marginTop: '0px' }}>
         <Button
           style={{ borderColor: '#e0e0e0' }}
           variant='outlined'
@@ -25,7 +25,7 @@ const HeaderButtonGroup = () => {
         >
           GET A LAWYER
         </Button>
-      </div>
+      </div> */}
       <div className='home__header'>
         <div className='search__buttons' style={{ marginTop: '0px' }}>
           <Button

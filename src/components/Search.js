@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import SearchIcon from '@mui/icons-material/Search';
 import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom';
+import AutoComplete from './AutoSuggestSearch';
 
 import * as searchActions from '../redux/actions/search';
 
@@ -22,7 +23,6 @@ const Search = ({ hideButtons = false }) => {
 
     if (trimmedInput.length > 2) {
       dispatch(searchActions.sendQuery(trimmedInput));
-
       history.push('/search');
     }
   };
@@ -31,14 +31,15 @@ const Search = ({ hideButtons = false }) => {
     <form className='search'>
       <div className='search__input'>
         <SearchIcon className='search__inputIcon' />
-        <input
+        {/* <input
           type='text'
           placeholder='Ask the constitution?'
           value={input}
           style={{ marginRight: '5px' }}
           spellCheck='true'
           onChange={(e) => setInput(e.target.value)}
-        />
+        /> */}
+        <AutoComplete setInput={setInput} />
         {/* <MicIcon /> */}
       </div>
 
@@ -50,13 +51,6 @@ const Search = ({ hideButtons = false }) => {
             type='submit'
             className='search__buttonsHidden'
           ></Button>
-          {/* <Button
-            style={{ borderColor: '#e0e0e0' }}
-            variant='outlined'
-            onClick={() => history.push('/contact-legal')}
-          >
-            Need a lawyer?
-          </Button> */}
         </div>
       ) : (
         <div className='search__buttons'>

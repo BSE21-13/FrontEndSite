@@ -10,7 +10,7 @@ export const getData = async (url = '', authToken) => {
     if (!authToken) {
       response = await fetch(url);
     } else {
-      fetchHeaders.Authorization = `Bearer ${authToken}`;
+      fetchHeaders.Authorization = `ApiKey ${authToken}`;
       response = await fetch(url, {
         headers: { ...fetchHeaders },
         signal,
@@ -52,7 +52,7 @@ export const postData = async (url = '', data, authToken) => {
     }
 
     if (authToken) {
-      fetchHeaders.Authorization = `Bearer ${authToken}`;
+      fetchHeaders.Authorization = `ApiKey ${authToken}`;
     }
 
     let response = await fetch(url, {

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './SearchPage.css';
 import { useParams } from 'react-router-dom';
 import SearchInPage from '../components/SearchInPage';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory, Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { Paper } from '@mui/material';
+import ArrowBack from '@mui/icons-material/KeyboardBackspace';
 import {
   Preliminaries,
   Preamble,
@@ -44,9 +45,20 @@ const ReadSearchResult = () => {
       <SearchInPage history={history} />
 
       <div className='searchPage__results'>
-        <h4 className='' style={{ textAlign: 'center' }}>
-          {id.toUpperCase()}
-        </h4>
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Link to={'/search'} style={{ textAlign: 'left' }}>
+            <ArrowBack style={{ color: 'black' }} fontSize={'large'} />
+          </Link>
+          <span className='chapter_title'>{id.toUpperCase()}</span>
+          <span style={{ textAlign: 'left' }}></span>
+        </div>
 
         <SearchResult data={id} section={currentSection} history={history} />
       </div>
@@ -54,10 +66,7 @@ const ReadSearchResult = () => {
   );
 };
 
-const SearchResult = ({ section, data, history }) => {
-  // useEffect(() => {
-  //    history.push(`/result/${data}#:~:text=(i)%20the,society`)
-  // }, [section]);
+const SearchResult = ({ section }) => {
   return (
     <Paper elevation={3}>
       <div className='browse_contents_data' style={{ padding: '20px 200px' }}>

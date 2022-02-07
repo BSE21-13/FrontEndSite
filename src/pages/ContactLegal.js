@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './SearchPage.css';
 import Recaptcha from 'react-recaptcha';
-// import SearchIcon from "'@mui/icons-material/Search";
 import {
   Box,
   Button,
@@ -32,14 +31,14 @@ const ContactLegal = () => {
     dispatch(contactActions.getLegal());
   }, []);
 
+  console.log('Test Key Log >> ', process.env.RECAPTCHA_SITE_KEY);
   // Pagination control
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(2);
+  const ITEMS_PER_PAGE = 2;
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem);
-
   // Change page
   const handleChange = (event, value) => {
     setCurrentPage(value);
@@ -48,7 +47,7 @@ const ContactLegal = () => {
   // Generate pagination numbers
   const pageNumbers = [];
 
-  for (let i = 1; i <= Math.ceil(data?.length / itemsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(data?.length / ITEMS_PER_PAGE); i++) {
     pageNumbers.push(i);
   }
 
@@ -61,12 +60,11 @@ const ContactLegal = () => {
           <h3>Our registered legal support partners.</h3>
         </div>
 
-        {loading ? (
-          <>
+        {loading && currentItems?.length === 0 ? (
+          <div>
             <LoadingSkeleton />
             <LoadingSkeleton />
-            <LoadingSkeleton />
-          </>
+          </div>
         ) : currentItems?.length > 0 ? (
           currentItems.map((item) => (
             <ContactResult
@@ -100,7 +98,12 @@ const ContactLegal = () => {
 const LoadingSkeleton = () => {
   return (
     <Paper className='contact__result' variant='outlined'>
-      <Skeleton variant='circular' width={150} height={150} />
+      <Skeleton
+        variant='circular'
+        width={150}
+        height={150}
+        style={{ marginRight: '20px' }}
+      />
 
       <Box sx={{ width: '80%' }}>
         <Skeleton
@@ -168,6 +171,7 @@ const ContactResult = ({
             src={`https://ui-avatars.com/api/?name=${data?.name}&bold=true`}
             className='contact__image'
             alt='Lawyer Dp'
+            loading='lazy'
           />
           <div className='contact__credentials'>
             <h4 className='Snippet'>{data.name}</h4>
@@ -229,6 +233,7 @@ const ContactModal = ({
   loading,
   success,
 }) => {
+  const { errorMessage } = useSelector((state) => state.contactLegal);
   const style = {
     position: 'absolute',
     top: '50%',
@@ -242,15 +247,23 @@ const ContactModal = ({
   };
 
   const [showAlert, setShowAlert] = useState(false);
+  const [sendEmailError, setError] = useState(false);
+
   useEffect(() => {
     setShowAlert(false);
+    setError(false);
   }, []);
+  console.log(sendEmailError);
 
   useEffect(() => {
     if (success?.message === 'Email submitted successfully') {
       setShowAlert(true);
+      setError(false);
+    } else if (errorMessage === 'Failed to send Email') {
+      setShowAlert(true);
+      setError(true);
     }
-  }, [success?.status]);
+  }, [success, errorMessage]);
 
   const [fromEmail, setFromEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -260,7 +273,7 @@ const ContactModal = ({
 
   const recaptchaApiKey = `${process.env.REACT_APP_RECAPTCHA_API_KEY}`;
 
-  const sendData = async (payload) => {
+  const sendData = (payload) => {
     if (isVerified) {
       dispatch(contactActions.sendEmail(payload));
       setIsVerified(false);
@@ -306,11 +319,12 @@ const ContactModal = ({
   const cancelEmail = () => {
     handleClose();
     setShowAlert(false);
+    setError(false);
     clearForm();
   };
 
   const validateEmail = (mail) => {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+    if (/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
       return true;
     }
     return false;
@@ -323,13 +337,18 @@ const ContactModal = ({
         onClose={() => {
           handleClose();
           setShowAlert(false);
+          setError(false);
         }}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
           {showAlert && (
-            <Alert severity='success'>Email sent successfully.</Alert>
+            <Alert severity={sendEmailError ? 'error' : 'success'}>
+              {sendEmailError
+                ? 'Failed to send email. Try again later.'
+                : 'Email sent successfully.'}
+            </Alert>
           )}
           <Typography
             id='modal-modal-title'
@@ -337,7 +356,7 @@ const ContactModal = ({
             component='h2'
             style={{ marginBottom: 20 }}
           >
-            CONTACT LEGAL REPRESENTATIVE
+            {`Contact ${lawyer?.name}`}
           </Typography>
           <div>
             <TextField
@@ -387,7 +406,7 @@ const ContactModal = ({
           </div>
           <div style={{ marginBottom: 20 }}>
             <Recaptcha
-              sitekey={`${recaptchaApiKey}`}
+              sitekey={recaptchaApiKey}
               render='explicit'
               verifyCallback={verifyCallback}
               onloadCallback={recaptchaLoaded}
