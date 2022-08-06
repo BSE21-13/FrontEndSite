@@ -324,7 +324,7 @@ const ContactModal = ({
   };
 
   const validateEmail = (mail) => {
-    if (/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+    if (/^\w+([-]?\w+)*@\w+([-]?[a-zA-Z0-9_])*(\.\w{2,3})+$/.test(mail)) {
       return true;
     }
     return false;
