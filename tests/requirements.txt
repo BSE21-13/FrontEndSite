@@ -2,7 +2,7 @@ apipkg==1.5
 appdirs==1.4.4
 Appium-Python-Client==0.50
 attrs==20.2.0
-certifi==2020.6.20
+certifi==2022.12.7
 chardet==3.0.4
 colorama==0.4.4
 configparser==5.0.1
